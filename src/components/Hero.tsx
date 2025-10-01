@@ -14,14 +14,13 @@ const generateRandomHash = () => {
 
 export const Hero = () => {
   const { accent } = useAccent();
-  const [showHash, setShowHash] = useState(false);
-  const [displayName, setDisplayName] = useState("Abhijeet Kumar");
+  const [showHash, setShowHash] = useState(true);
 
   useEffect(() => {
     setShowHash(true);
     const timer = setTimeout(() => {
       setShowHash(false);
-    }, 800);
+    }, 1200);
     return () => clearTimeout(timer);
   }, [accent]);
 
@@ -62,106 +61,80 @@ export const Hero = () => {
       <FallingCommands />
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Terminal & Text */}
+          {/* Left Column - Title & Animations */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="space-y-8"
+            className="space-y-6"
           >
-            {/* Terminal Prompt */}
-            <div className="font-mono text-sm md:text-base space-y-2">
-              <div className="text-terminal-green">
-                <span className="text-muted-foreground">abhijeet@linux</span>:
-                <span className="text-terminal-cyan">~</span>$ ./D0p3W0lf_init.sh
-              </div>
-              <div className="text-terminal-cyan flex items-start gap-2">
-                <span className="text-muted-foreground">whoami</span>
-                <div className="flex-1">
-                  <AnimatePresence mode="wait">
-                    {showHash ? (
-                      <motion.span
-                        key="hash"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="text-terminal-yellow"
-                      >
-                        {generateRandomHash()}
-                      </motion.span>
-                    ) : (
-                      <motion.span
-                        key="name"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
-                      >
-                        {displayName}
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-              
-              {/* Job Titles */}
-              <div className="text-muted-foreground flex items-start gap-2">
-                <span className="text-terminal-green">role</span>
-                <span>&gt;</span>
-                <div className="flex-1 text-primary">
-                  <TypeAnimation
-                    key={accent}
-                    sequence={jobTitles}
-                    wrapper="span"
-                    speed={50}
-                    repeat={Infinity}
-                    cursor={true}
-                  />
-                </div>
+            {/* Name Title with Hash Decryption */}
+            <div className="space-y-6">
+              <h1 className="text-4xl md:text-6xl font-bold font-mono tracking-tight min-h-[8rem] md:min-h-[10rem]">
+                <AnimatePresence mode="wait">
+                  {showHash ? (
+                    <motion.span
+                      key="hash"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="text-terminal-yellow block"
+                    >
+                      {generateRandomHash()}
+                      <br />
+                      {generateRandomHash()}
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="name"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.5 }}
+                      className="block"
+                    >
+                      MUHAMMED
+                      <br />
+                      <span className="text-primary animate-glow-pulse">PATEL</span>
+                    </motion.span>
+                  )}
+                </AnimatePresence>
+              </h1>
+
+              {/* Job Titles Typewriter */}
+              <div className="text-lg md:text-xl tracking-hero">
+                <TypeAnimation
+                  key={accent}
+                  sequence={jobTitles}
+                  wrapper="span"
+                  speed={50}
+                  repeat={Infinity}
+                  cursor={true}
+                  className="text-primary font-mono"
+                />
               </div>
 
-              {/* Quote with decrypt effect */}
+              {/* Quote with Decrypt Effect */}
               <motion.div
                 key={`quote-${accent}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5, duration: 1 }}
-                className="text-muted-foreground text-xs md:text-sm flex items-start gap-2 pt-2"
+                className="text-sm md:text-base text-muted-foreground font-mono"
               >
-                <span className="text-terminal-cyan">quote</span>
-                <span>&gt;</span>
-                <div className="flex-1">
-                  <TypeAnimation
-                    key={`quote-anim-${accent}`}
-                    sequence={[
-                      500,
-                      "Decrypting... " + generateRandomHash(),
-                      1000,
-                      quote,
-                    ]}
-                    wrapper="span"
-                    speed={70}
-                    cursor={false}
-                  />
-                </div>
+                <TypeAnimation
+                  key={`quote-anim-${accent}`}
+                  sequence={[
+                    500,
+                    "Decrypting... " + generateRandomHash(),
+                    1000,
+                    quote,
+                  ]}
+                  wrapper="span"
+                  speed={70}
+                  cursor={false}
+                />
               </motion.div>
-            </div>
-
-            {/* Hero Title */}
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl font-bold font-mono tracking-tight">
-                CYBERSECURITY
-                <br />
-                <span className="text-primary animate-glow-pulse">PORTFOLIO</span>
-              </h1>
-              <motion.p
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 2, duration: 1 }}
-                className="text-lg md:text-xl text-muted-foreground tracking-hero"
-              >
-                ETHICAL HACKER · PENETRATION TESTER
-              </motion.p>
             </div>
 
             {/* CTAs */}
