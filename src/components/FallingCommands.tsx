@@ -63,7 +63,7 @@ export const FallingCommands = () => {
         y: Math.random() * -canvas.height,
         speed: 0.3 + Math.random() * 0.5,
         text: commands[Math.floor(Math.random() * commands.length)],
-        opacity: 0.1 + Math.random() * 0.2,
+        opacity: 0.3 + Math.random() * 0.3,
       });
     }
 
@@ -99,7 +99,7 @@ export const FallingCommands = () => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none opacity-20"
+      className="absolute inset-0 pointer-events-none opacity-40"
       style={{ zIndex: 0 }}
     />
   );

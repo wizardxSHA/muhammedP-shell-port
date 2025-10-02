@@ -7,6 +7,11 @@ import { useAccent } from "@/contexts/AccentContext";
 import { FallingCommands } from "./FallingCommands";
 import { useState, useEffect } from "react";
 
+const generateRandomChar = () => {
+  const chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*";
+  return chars[Math.floor(Math.random() * chars.length)];
+};
+
 const generateRandomHash = () => {
   const chars = "0123456789abcdef";
   return Array.from({ length: 16 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
@@ -14,14 +19,48 @@ const generateRandomHash = () => {
 
 export const Hero = () => {
   const { accent } = useAccent();
-  const [showHash, setShowHash] = useState(true);
+  const [displayName, setDisplayName] = useState("");
+  const [isDecrypting, setIsDecrypting] = useState(true);
+  const realName = "MUHAMMED PATEL";
 
   useEffect(() => {
-    setShowHash(true);
-    const timer = setTimeout(() => {
-      setShowHash(false);
-    }, 1200);
-    return () => clearTimeout(timer);
+    setIsDecrypting(true);
+    setDisplayName("");
+    
+    const decryptDuration = 1200;
+    const frameInterval = 50;
+    const frames = decryptDuration / frameInterval;
+    let currentFrame = 0;
+
+    const decryptInterval = setInterval(() => {
+      currentFrame++;
+      const progress = currentFrame / frames;
+      
+      const newName = realName.split('').map((char, index) => {
+        if (char === ' ') return ' ';
+        if (char === '\n') return '\n';
+        
+        const charProgress = Math.max(0, (progress * realName.length - index) / 3);
+        
+        if (charProgress >= 1) {
+          return char;
+        } else if (charProgress > 0) {
+          return Math.random() > 0.5 ? char : generateRandomChar();
+        } else {
+          return generateRandomChar();
+        }
+      }).join('');
+      
+      setDisplayName(newName);
+      
+      if (currentFrame >= frames) {
+        clearInterval(decryptInterval);
+        setDisplayName(realName);
+        setIsDecrypting(false);
+      }
+    }, frameInterval);
+
+    return () => clearInterval(decryptInterval);
   }, [accent]);
 
   const scrollToSection = (id: string) => {
@@ -68,37 +107,22 @@ export const Hero = () => {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            {/* Name Title with Hash Decryption */}
+            {/* Name Title with Character-by-Character Decryption */}
             <div className="space-y-6">
               <h1 className="text-4xl md:text-6xl font-bold font-mono tracking-tight min-h-[8rem] md:min-h-[10rem]">
-                <AnimatePresence mode="wait">
-                  {showHash ? (
-                    <motion.span
-                      key="hash"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="text-terminal-yellow block"
-                    >
-                      {generateRandomHash()}
-                      <br />
-                      {generateRandomHash()}
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="name"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.5 }}
-                      className="block"
-                    >
-                      MUHAMMED
-                      <br />
-                      <span className="text-primary animate-glow-pulse">PATEL</span>
-                    </motion.span>
-                  )}
-                </AnimatePresence>
+                <motion.span
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="block"
+                >
+                  {displayName.split('\n').map((line, i) => (
+                    <span key={i} className={i === 1 ? "text-primary animate-glow-pulse" : ""}>
+                      {line}
+                      {i === 0 && <br />}
+                    </span>
+                  ))}
+                </motion.span>
               </h1>
 
               {/* Job Titles Typewriter */}
@@ -114,7 +138,7 @@ export const Hero = () => {
                 />
               </div>
 
-              {/* Quote with Decrypt Effect */}
+              {/* Quote with Mass Gibberish Decrypt Effect */}
               <motion.div
                 key={`quote-${accent}`}
                 initial={{ opacity: 0 }}
@@ -126,12 +150,22 @@ export const Hero = () => {
                   key={`quote-anim-${accent}`}
                   sequence={[
                     500,
-                    "Decrypting... " + generateRandomHash(),
-                    1000,
+                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
+                    100,
+                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
+                    100,
+                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
+                    100,
+                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
+                    100,
+                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
+                    100,
+                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
+                    200,
                     quote,
                   ]}
                   wrapper="span"
-                  speed={70}
+                  speed={99}
                   cursor={false}
                 />
               </motion.div>
