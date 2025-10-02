@@ -22,7 +22,7 @@ export const Hero = () => {
   const [displayName, setDisplayName] = useState("");
   const [displayQuote, setDisplayQuote] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
-  const realName = "MUHAMMED PATEL";
+  const realName = "MUHAMMED\nPATEL";
 
   useEffect(() => {
     setIsDecrypting(true);
@@ -156,10 +156,11 @@ export const Hero = () => {
                   className="block"
                 >
                   {displayName.split('\n').map((line, i) => (
-                    <span key={i} className={i === 1 ? "text-primary animate-glow-pulse" : ""}>
-                      {line}
-                      {i === 0 && <br />}
-                    </span>
+                    <div key={i}>
+                      <span className={i === 1 ? "text-primary animate-glow-pulse" : ""}>
+                        {line}
+                      </span>
+                    </div>
                   ))}
                 </motion.span>
               </h1>
