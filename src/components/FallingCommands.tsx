@@ -34,6 +34,7 @@ interface CommandParticle {
   speed: number;
   text: string;
   opacity: number;
+  color: string;
 }
 
 export const FallingCommands = () => {
@@ -55,6 +56,12 @@ export const FallingCommands = () => {
 
     const particles: CommandParticle[] = [];
     const particleCount = 15;
+    const colors = [
+      "147, 51, 234",  // purple
+      "34, 197, 94",   // green
+      "239, 68, 68",   // red
+      "59, 130, 246",  // blue
+    ];
 
     // Initialize particles
     for (let i = 0; i < particleCount; i++) {
@@ -64,6 +71,7 @@ export const FallingCommands = () => {
         speed: 0.3 + Math.random() * 0.5,
         text: commands[Math.floor(Math.random() * commands.length)],
         opacity: 0.3 + Math.random() * 0.3,
+        color: colors[Math.floor(Math.random() * colors.length)],
       });
     }
 
@@ -78,11 +86,12 @@ export const FallingCommands = () => {
           particle.y = -50;
           particle.x = Math.random() * canvas.width;
           particle.text = commands[Math.floor(Math.random() * commands.length)];
+          particle.color = colors[Math.floor(Math.random() * colors.length)];
         }
 
         // Draw command
         ctx.font = "14px 'JetBrains Mono', monospace";
-        ctx.fillStyle = `rgba(59, 130, 246, ${particle.opacity})`;
+        ctx.fillStyle = `rgba(${particle.color}, ${particle.opacity})`;
         ctx.fillText(particle.text, particle.x, particle.y);
       });
 
