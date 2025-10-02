@@ -20,13 +20,16 @@ const generateRandomHash = () => {
 export const Hero = () => {
   const { accent } = useAccent();
   const [displayName, setDisplayName] = useState("");
+  const [displayQuote, setDisplayQuote] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
   const realName = "MUHAMMED PATEL";
 
   useEffect(() => {
     setIsDecrypting(true);
     setDisplayName("");
+    setDisplayQuote("");
     
+    // Name decrypt animation
     const decryptDuration = 1200;
     const frameInterval = 50;
     const frames = decryptDuration / frameInterval;
@@ -60,7 +63,43 @@ export const Hero = () => {
       }
     }, frameInterval);
 
-    return () => clearInterval(decryptInterval);
+    // Quote decrypt animation (longer duration, faster interval)
+    const quoteDecryptDuration = 1800;
+    const quoteFrameInterval = 30;
+    const quoteFrames = quoteDecryptDuration / quoteFrameInterval;
+    let quoteCurrentFrame = 0;
+
+    const quoteDecryptInterval = setInterval(() => {
+      quoteCurrentFrame++;
+      const quoteProgress = quoteCurrentFrame / quoteFrames;
+      
+      const newQuote = quote.split('').map((char, index) => {
+        if (char === ' ') return ' ';
+        if (char === '\n') return '\n';
+        
+        const charProgress = Math.max(0, (quoteProgress * quote.length - index) / 3);
+        
+        if (charProgress >= 1) {
+          return char;
+        } else if (charProgress > 0) {
+          return Math.random() > 0.5 ? char : generateRandomChar();
+        } else {
+          return generateRandomChar();
+        }
+      }).join('');
+      
+      setDisplayQuote(newQuote);
+      
+      if (quoteCurrentFrame >= quoteFrames) {
+        clearInterval(quoteDecryptInterval);
+        setDisplayQuote(quote);
+      }
+    }, quoteFrameInterval);
+
+    return () => {
+      clearInterval(decryptInterval);
+      clearInterval(quoteDecryptInterval);
+    };
   }, [accent]);
 
   const scrollToSection = (id: string) => {
@@ -138,36 +177,15 @@ export const Hero = () => {
                 />
               </div>
 
-              {/* Quote with Mass Gibberish Decrypt Effect */}
+              {/* Quote with Character-by-Character Decrypt Effect */}
               <motion.div
                 key={`quote-${accent}`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5, duration: 1 }}
+                transition={{ delay: 0.3, duration: 1 }}
                 className="text-sm md:text-base text-muted-foreground font-mono"
               >
-                <TypeAnimation
-                  key={`quote-anim-${accent}`}
-                  sequence={[
-                    500,
-                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
-                    100,
-                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
-                    100,
-                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
-                    100,
-                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
-                    100,
-                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
-                    100,
-                    Array.from({ length: quote.length }, () => generateRandomChar()).join(''),
-                    200,
-                    quote,
-                  ]}
-                  wrapper="span"
-                  speed={99}
-                  cursor={false}
-                />
+                {displayQuote}
               </motion.div>
             </div>
 
