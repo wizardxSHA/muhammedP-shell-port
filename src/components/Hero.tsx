@@ -234,11 +234,18 @@ export const Hero = () => {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
-              <img
-                src={accent === "blue" ? profileImageBlue : profileImageRed}
-                alt="Cybersecurity Professional Profile"
-                className="relative w-80 h-80 object-cover rounded-2xl shadow-glow border-2 border-primary/30"
-              />
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={accent}
+                  src={accent === "blue" ? profileImageBlue : profileImageRed}
+                  alt="Cybersecurity Professional Profile"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="relative w-80 h-80 object-cover rounded-2xl shadow-glow border-2 border-primary/30"
+                />
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>
