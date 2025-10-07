@@ -2,10 +2,8 @@ import { TypeAnimation } from "react-type-animation";
 import { Button } from "./ui/button";
 import { ArrowRight, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import avatarFrame1 from "@/assets/avatar-frame-1.jpg";
-import avatarFrame2 from "@/assets/avatar-frame-2.jpg";
-import avatarFrame3 from "@/assets/avatar-frame-3.jpg";
-import avatarFrame4 from "@/assets/avatar-frame-4.jpg";
+import avatarBlue from "@/assets/avatar-blue-base.png";
+import avatarRed from "@/assets/avatar-red-hood.png";
 import { useAccent } from "@/contexts/AccentContext";
 import { FallingCommands } from "./FallingCommands";
 import { useState, useEffect } from "react";
@@ -25,42 +23,7 @@ export const Hero = () => {
   const [displayName, setDisplayName] = useState("");
   const [displayQuote, setDisplayQuote] = useState("");
   const [isDecrypting, setIsDecrypting] = useState(true);
-  const [currentFrame, setCurrentFrame] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
   const realName = "MUHAMMED\nPATEL";
-
-  const avatarFrames = [avatarFrame1, avatarFrame2, avatarFrame3, avatarFrame4];
-
-  useEffect(() => {
-    // Animate avatar frames when accent changes
-    setIsAnimating(true);
-    const targetFrame = accent === "red" ? 3 : 0;
-    const frameDuration = 150; // milliseconds per frame
-    
-    const animateFrames = () => {
-      const step = currentFrame < targetFrame ? 1 : -1;
-      let frame = currentFrame;
-      
-      const frameInterval = setInterval(() => {
-        frame += step;
-        setCurrentFrame(frame);
-        
-        if (frame === targetFrame) {
-          clearInterval(frameInterval);
-          setIsAnimating(false);
-        }
-      }, frameDuration);
-      
-      return () => clearInterval(frameInterval);
-    };
-    
-    if (currentFrame !== targetFrame) {
-      const cleanup = animateFrames();
-      return cleanup;
-    } else {
-      setIsAnimating(false);
-    }
-  }, [accent]);
 
   useEffect(() => {
     setIsDecrypting(true);
@@ -271,11 +234,18 @@ export const Hero = () => {
           >
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
-              <img
-                src={avatarFrames[currentFrame]}
-                alt="Cybersecurity Professional Avatar"
-                className="relative w-80 h-80 object-cover rounded-2xl shadow-glow border-2 border-primary/30 transition-all duration-150"
-              />
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={accent}
+                  src={accent === "blue" ? avatarBlue : avatarRed}
+                  alt="Cybersecurity Professional Avatar"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                  className="relative w-80 h-80 object-contain rounded-2xl shadow-glow"
+                />
+              </AnimatePresence>
             </div>
           </motion.div>
         </div>
