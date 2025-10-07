@@ -2,7 +2,8 @@ import { TypeAnimation } from "react-type-animation";
 import { Button } from "./ui/button";
 import { ArrowRight, FileText } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import profileImage from "@/assets/profile.jpg";
+import profileImageBlue from "@/assets/profile-blue.jpg";
+import profileImageRed from "@/assets/profile-red.jpg";
 import { useAccent } from "@/contexts/AccentContext";
 import { FallingCommands } from "./FallingCommands";
 import { useState, useEffect } from "react";
@@ -234,7 +235,7 @@ export const Hero = () => {
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full"></div>
               <img
-                src={profileImage}
+                src={accent === "blue" ? profileImageBlue : profileImageRed}
                 alt="Cybersecurity Professional Profile"
                 className="relative w-80 h-80 object-cover rounded-2xl shadow-glow border-2 border-primary/30"
               />

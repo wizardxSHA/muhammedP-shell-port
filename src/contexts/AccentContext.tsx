@@ -11,7 +11,7 @@ interface AccentContextType {
 const AccentContext = createContext<AccentContextType | undefined>(undefined);
 
 export const AccentProvider = ({ children }: { children: ReactNode }) => {
-  const [accent, setAccent] = useState<AccentType>("blue");
+  const [accent, setAccent] = useState<AccentType>("red");
 
   useEffect(() => {
     const root = document.documentElement;
